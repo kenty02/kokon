@@ -1,44 +1,65 @@
-import NextLogo from "./NextLogo";
-import SupabaseLogo from "./SupabaseLogo";
+"use client";
+import type { Database } from "@/database.types";
+import { createClient } from "@/utils/supabase/client";
+import { Center, Option, Select, Text, useNotice } from "@yamada-ui/react";
+import { useParams, useRouter } from "next/navigation";
+import { useCallback, useEffect, useRef, useState } from "react";
 
+const supabase = createClient();
 export default function Header() {
-  return (
-    <div className="flex flex-col gap-16 items-center">
-      <div className="flex gap-8 justify-center items-center">
-        <a
-          href="https://supabase.com/?utm_source=create-next-app&utm_medium=template&utm_term=nextjs"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <SupabaseLogo />
-        </a>
-        <span className="border-l rotate-45 h-6" />
-        <a href="https://nextjs.org/" target="_blank" rel="noreferrer">
-          <NextLogo />
-        </a>
-      </div>
-      <h1 className="sr-only">Supabase and Next.js Starter Template</h1>
-      <p className="text-3xl lg:text-4xl !leading-tight mx-auto max-w-xl text-center">
-        The fastest way to build apps with{" "}
-        <a
-          href="https://supabase.com/?utm_source=create-next-app&utm_medium=template&utm_term=nextjs"
-          target="_blank"
-          className="font-bold hover:underline"
-          rel="noreferrer"
-        >
-          Supabase
-        </a>{" "}
-        and{" "}
-        <a
-          href="https://nextjs.org/"
-          target="_blank"
-          className="font-bold hover:underline"
-          rel="noreferrer"
-        >
-          Next.js
-        </a>
-      </p>
-      <div className="w-full p-[1px] bg-gradient-to-r from-transparent via-foreground/10 to-transparent my-8" />
-    </div>
-  );
+	// todo: `teams/[id]`以外のパターンも考慮する 例えば`user/[id]`などで絶対バグる
+	const { id } = useParams();
+	const isTeamPage = id !== undefined;
+	const notice = useNotice();
+	const [teams, setTeams] = useState<
+		Database["public"]["Tables"]["teams"]["Row"][]
+	>([]);
+	async function getTeams() {
+		const { data: teams, error } = await supabase.from("teams").select("*");
+		if (error) {
+			console.error(error);
+			notice({
+				description: "チームを取得できませんでした",
+				status: "error",
+			});
+			return;
+		}
+		setTeams(teams);
+	}
+	useEffect(() => {
+		void getTeams();
+	}, []);
+	const formRef = useRef<HTMLFormElement>(null);
+
+	const router = useRouter();
+	return (
+		<header>
+			<Center py={4}>
+				<Text size={"xl"} fontWeight={"bold"}>
+					kokon
+				</Text>
+			</Center>
+
+			<form ref={formRef}>
+				<Select
+					placeholder="チームを選択"
+					onChange={async (value) => {
+						if (value === "") {
+							router.push("/");
+							return;
+						}
+						router.push(`/teams/${value}`);
+					}}
+					name={"team_id"}
+					defaultValue={typeof id === "string" ? id : undefined}
+				>
+					{teams?.map((team) => (
+						<Option key={team.id} value={String(team.id)}>
+							{team.name}
+						</Option>
+					))}
+				</Select>
+			</form>
+		</header>
+	);
 }
