@@ -1,28 +1,28 @@
 {
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "gen-types": "supabase gen types typescript --project-id eoadgfvaoqbncwfscfrh > database.types.ts"
-  },
-  "dependencies": {
-    "@supabase/ssr": "latest",
-    "@supabase/supabase-js": "latest",
-    "@yamada-ui/dropzone": "^1.0.19",
-    "@yamada-ui/react": "^1.2.11",
-    "geist": "^1.2.1",
-    "next": "latest",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "typescript": "5.3.3",
-    "zod": "^3.22.4"
-  },
-  "devDependencies": {
-    "@biomejs/biome": "1.6.3",
-    "@types/node": "20.11.5",
-    "@types/react": "18.2.48",
-    "@types/react-dom": "18.2.18",
-    "encoding": "^0.1.13"
-  }
+	"private": true,
+	"scripts": {
+		"dev": "next dev",
+		"build": "next build",
+		"start": "next start",
+		"gen-types": "supabase gen types typescript --project-id eoadgfvaoqbncwfscfrh > database.types.ts"
+	},
+	"dependencies": {
+		"@supabase/ssr": "latest",
+		"@supabase/supabase-js": "latest",
+		"@yamada-ui/dropzone": "^1.0.19",
+		"@yamada-ui/react": "^1.2.11",
+		"geist": "^1.2.1",
+		"next": "latest",
+		"react": "18.2.0",
+		"react-dom": "18.2.0",
+		"typescript": "5.3.3",
+		"zod": "^3.22.4"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "1.6.3",
+		"@types/node": "20.11.5",
+		"@types/react": "18.2.48",
+		"@types/react-dom": "18.2.18",
+		"encoding": "^0.1.13"
+	}
 }

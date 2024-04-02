@@ -24,7 +24,7 @@ export default async function Index() {
 	return (
 		<div>
 			<Text>チームを選んでください</Text>
-			{teamMemberships.length == 0 ? (
+			{teamMemberships.length === 0 ? (
 				<Text>
 					あなたはどのチームにも所属していないようです。
 					<Link href={"/teams/invitations/global"}>ここ</Link>

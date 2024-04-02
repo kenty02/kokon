@@ -7,6 +7,7 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 
 export async function sendHelp(
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	prevState: { message: string; errors?: any },
 	formData: FormData,
 ) {
