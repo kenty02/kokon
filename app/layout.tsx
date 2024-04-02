@@ -1,5 +1,4 @@
 import {colorModeManager, ColorModeScript, UIProvider} from "@yamada-ui/react";
-import Header from "@/components/Header";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -21,7 +20,6 @@ export default function RootLayout({
       <body>
       <ColorModeScript type="cookie" nonce="testing" />
       <UIProvider colorModeManager={{ ...colorModeManager }.cookieStorage}>
-        <Header/>
         <main>
             {children}
         </main>

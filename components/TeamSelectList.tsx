@@ -6,7 +6,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 const supabase = createClient();
-export default function Header() {
+export default function TeamSelectList() {
 	// todo: `teams/[id]`以外のパターンも考慮する 例えば`user/[id]`などで絶対バグる
 	const { id } = useParams();
 	const isTeamPage = id !== undefined;
