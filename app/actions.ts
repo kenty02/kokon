@@ -1,8 +1,8 @@
 "use server";
 
+import { createAdminClient } from "@/utils/supabase/admin";
 import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
@@ -77,4 +77,45 @@ export async function setTeamId(formData: FormData) {
 }
 export async function handleRevalidate(path: string) {
 	revalidatePath(path);
+}
+
+export async function createTeam(
+	state: { message: string; id?: number },
+	formData: FormData,
+) {
+	const supabase = createClient();
+	const { data: userData } = await supabase.auth.getUser();
+	if (!userData.user) {
+		return { message: "You must be logged in to create a team" };
+	}
+	const schema = z.object({
+		name: z.string(),
+	});
+	const data = schema.safeParse({
+		name: formData.get("name"),
+	});
+	if (!data.success) {
+		return {
+			message: `validation failed, ${JSON.stringify(data.error.flatten())}`,
+		};
+	}
+	const supabaseAdmin = createAdminClient();
+	const { error, data: createdTeam } = await supabaseAdmin
+		.from("teams")
+		.insert({ name: data.data.name, owner_id: userData.user.id })
+		.select()
+		.single();
+
+	if (error || !createdTeam) {
+		return { message: "Could not create team" };
+	}
+	// add user to team
+	const { error: membershipError } = await supabaseAdmin
+		.from("team_membership")
+		.insert({ team_id: createdTeam.id, user_id: userData.user.id });
+	if (membershipError) {
+		return { message: "Could not add user to team" };
+	}
+	revalidatePath("/teams", "layout");
+	redirect(`/teams/${createdTeam.id}`);
 }

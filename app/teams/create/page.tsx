@@ -1,19 +1,9 @@
 "use client";
-import { createTeam } from "@/app/actions";
-import { createClient } from "@/utils/supabase/client";
-import {
-	Box,
-	Button,
-	FormControl,
-	Input,
-	Text,
-	VStack,
-} from "@yamada-ui/react";
-import { useFormState } from "react-dom";
+import {createTeam} from "@/app/actions";
+import {Box, Button, FormControl, Input, Text, VStack,} from "@yamada-ui/react";
+import {useFormState} from "react-dom";
 
 export default function CreateTeamPage({ params }: { params: { id: number } }) {
-	const supabase = createClient();
-
 	const initialState = { message: "" };
 
 	const [state, formAction] = useFormState(createTeam, initialState);

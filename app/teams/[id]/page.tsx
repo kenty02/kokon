@@ -1,14 +1,12 @@
-import { deleteHelp } from "@/app/actions";
-import { DeleteButton } from "@/app/teams/[id]/delete-button";
-import { GetInvitationLinkButton } from "@/app/teams/[id]/get-invitation-link-button";
+import {DeleteButton} from "@/app/teams/[id]/delete-button";
+import {GetInvitationLinkButton} from "@/app/teams/[id]/get-invitation-link-button";
 import SendHelp from "@/app/teams/[id]/send-help";
-import { Subscriptions } from "@/app/teams/[id]/subscriptions";
-import { createClient } from "@/utils/supabase/server";
+import {Subscriptions} from "@/app/teams/[id]/subscriptions";
+import {createClient} from "@/utils/supabase/server";
 import {
 	Accordion,
 	AccordionItem,
 	Box,
-	Button,
 	Card,
 	CardBody,
 	CardHeader,
@@ -17,7 +15,7 @@ import {
 	Text,
 	VStack,
 } from "@yamada-ui/react";
-import { redirect } from "next/navigation";
+import {redirect} from "next/navigation";
 
 export default async function TeamPage({ params }: { params: { id: number } }) {
 	const supabase = createClient();
@@ -35,12 +33,17 @@ export default async function TeamPage({ params }: { params: { id: number } }) {
 		.select("*")
 		.eq("team_id", params.id);
 
-	//get team
+	if (error) {
+		throw new Error("Failed to fetch help requests");
+	}
 	const { data: team, error: teamError } = await supabase
 		.from("teams")
 		.select("*")
 		.eq("id", params.id)
 		.single();
+	if (teamError || !team) {
+		throw new Error("Failed to fetch team");
+	}
 
 	return (
 		<Box>

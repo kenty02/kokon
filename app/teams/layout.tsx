@@ -1,6 +1,6 @@
 import TeamSelectList from "@/components/TeamSelectList";
-import { createClient } from "@/utils/supabase/server";
-import { redirect } from "next/navigation";
+import {createClient} from "@/utils/supabase/server";
+import {redirect} from "next/navigation";
 
 export default async function RootLayout({
 	children,
@@ -16,9 +16,17 @@ export default async function RootLayout({
 	if (!user) {
 		return redirect("/login");
 	}
+
+	//get team
+	const { data: teams, error: teamsError } = await supabase
+		.from("teams")
+		.select("*");
+	if (teamsError || !teams) {
+		throw new Error("Failed to fetch teams");
+	}
 	return (
 		<>
-			<TeamSelectList />
+			<TeamSelectList teams={teams} />
 			{children}
 		</>
 	);
