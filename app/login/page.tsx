@@ -33,6 +33,9 @@ export default function Login({
 	return (
 		<div>
 			<form action={signIn}>
+				<Text>
+					注意：現在のバージョンはテスト中です。センシティブな情報を本サービスを用いて共有しないでください。
+				</Text>
 				<LoginButton pendingText={"redirecting..."}>
 					Login via GitHub
 				</LoginButton>
