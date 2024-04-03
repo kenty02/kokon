@@ -48,6 +48,10 @@ export default function TeamSelectList() {
 							router.push("/");
 							return;
 						}
+						if (value === "_create") {
+							router.push("/teams/create");
+							return;
+						}
 						router.push(`/teams/${value}`);
 					}}
 					name={"team_id"}
@@ -58,6 +62,9 @@ export default function TeamSelectList() {
 							{team.name}
 						</Option>
 					))}
+					<Option key={"_create"} value={"_create"}>
+						新しいチームを作成
+					</Option>
 				</Select>
 			</form>
 		</header>
